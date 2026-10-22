@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import logo from '../assets/logo.png';
 
 export default function Loader({ onComplete }) {
   const loaderRef = useRef(null);
@@ -91,7 +92,7 @@ export default function Loader({ onComplete }) {
         pointerEvents: 'none',
       }} />
 
-      {/* Logo — text-based, always visible */}
+      {/* Logo image */}
       <div
         ref={logoRef}
         style={{
@@ -99,64 +100,18 @@ export default function Loader({ onComplete }) {
           flexDirection: 'column',
           alignItems: 'center',
           gap: '4px',
-          filter: 'drop-shadow(0 4px 24px rgba(127,16,34,0.6))',
         }}
       >
-        {/* Brand mark circle */}
-        <div style={{
-          width: '120px',
-          height: '120px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #7B1F6E, #4a0011)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          border: '2px solid rgba(241,210,112,0.3)',
-          boxShadow: '0 8px 40px rgba(127,16,34,0.5)',
-          position: 'relative',
-          overflow: 'hidden',
-        }}>
-          {/* Inner glow */}
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            borderRadius: '50%',
-            background: 'radial-gradient(circle at 40% 35%, rgba(245,240,232,0.12), transparent 70%)',
-          }} />
-          <span style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '38px',
-            color: '#f5f0e8',
-            letterSpacing: '0.05em',
-            lineHeight: 1,
-            position: 'relative',
-            zIndex: 1,
-          }}>
-            momo
-          </span>
-          <span style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '32px',
-            color: '#f1d270',
-            letterSpacing: '0.08em',
-            lineHeight: 1,
-            position: 'relative',
-            zIndex: 1,
-          }}>
-            let
-          </span>
-          {/* Fire dot accent */}
-          <div style={{
-            position: 'absolute',
-            top: '14px',
-            right: '18px',
-            width: '10px',
-            height: '14px',
-            borderRadius: '50% 50% 30% 30%',
-            background: 'linear-gradient(180deg, #F5A623, #E8541A)',
-          }} />
-        </div>
+        <img
+          src={logo}
+          alt="MOMOLET"
+          style={{
+            width: '160px',
+            height: '160px',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 8px 32px rgba(127,16,34,0.6))',
+          }}
+        />
       </div>
 
       {/* Tagline */}
