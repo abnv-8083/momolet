@@ -405,3 +405,86 @@ body {
 .line-reveal {
   overflow: hidden;
 }
+
+/* ===========================
+   Mobile Responsive Utilities
+   (append — do not remove existing rules)
+=========================== */
+
+/* Container padding: 48px desktop → 20px mobile */
+@media (max-width: 767px) {
+  .mob-pad {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* Section vertical padding */
+  .mob-sec-pad {
+    padding-top: 64px !important;
+    padding-bottom: 64px !important;
+  }
+
+  /* Gallery: 4-col → 2-col */
+  .mob-grid-2col {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Grid spans reset on mobile */
+  .mob-span-reset {
+    grid-row: auto !important;
+    grid-column: auto !important;
+  }
+
+  /* Heading row: flex row → flex column */
+  .mob-flex-col {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  /* Stacked buttons: flex-direction column, full width */
+  .mob-btn-stack {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .mob-btn-stack a,
+  .mob-btn-stack button {
+    width: 100% !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Filter tabs: horizontal scroll */
+  .mob-filter-scroll {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding-bottom: 4px !important;
+  }
+
+  .mob-filter-scroll::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* Loader: smaller logo + bar */
+  .mob-loader-logo {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .mob-loader-bar {
+    width: 140px !important;
+  }
+}
+
+/* Tablet: 768px–1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tab-grid-2col {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .tab-footer-2col {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
