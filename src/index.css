@@ -1,0 +1,407 @@
+@import "tailwindcss";
+
+/* ===========================
+   MOMOLET Design System
+=========================== */
+
+@theme {
+  --color-plum-50: #fdf4f8;
+  --color-plum-100: #fbe8f3;
+  --color-plum-200: #f5c6e3;
+  --color-plum-300: #ec93ca;
+  --color-plum-400: #df5faf;
+  --color-plum-500: #c93990;
+  --color-plum-600: #a5267a;
+  --color-plum-700: #872063;
+  --color-plum-800: #701d54;
+  --color-plum-900: #5e1b47;
+
+  --color-burgundy-50: #fef2f4;
+  --color-burgundy-100: #fde6ea;
+  --color-burgundy-200: #fbb0bc;
+  --color-burgundy-300: #f77b92;
+  --color-burgundy-400: #f0405c;
+  --color-burgundy-500: #e5162f;
+  --color-burgundy-600: #c41226;
+  --color-burgundy-700: #a01022;
+  --color-burgundy-800: #7f1022;
+  --color-burgundy-900: #4a0011;
+  --color-burgundy-950: #2d0009;
+
+  --color-cream-50: #fefdf8;
+  --color-cream-100: #fdf9ed;
+  --color-cream-200: #faf0ce;
+  --color-cream-300: #f6e3a3;
+  --color-cream-400: #f1d270;
+  --color-cream-500: #e8bb3e;
+  --color-cream-600: #d4a329;
+  --color-cream-700: #af841f;
+  --color-cream-800: #8d6a1d;
+  --color-cream-900: #74571e;
+
+  --color-warm: #f5f0e8;
+  --color-warm-dark: #ede4d3;
+  --color-charcoal: #1a1412;
+
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+/* ===========================
+   Base & Reset
+=========================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-warm);
+  color: var(--color-charcoal);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===========================
+   Typography Utilities
+=========================== */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* ===========================
+   Custom Scrollbar
+=========================== */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f5f0e8;
+}
+::-webkit-scrollbar-thumb {
+  background: #7f1022;
+  border-radius: 3px;
+}
+
+/* ===========================
+   Smooth Scroll Container
+=========================== */
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+/* ===========================
+   Clip Path Animations
+=========================== */
+.clip-reveal {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clip-reveal.revealed {
+  clip-path: inset(0% 0 0 0);
+}
+
+/* ===========================
+   Hero Section
+=========================== */
+.hero-text-overflow {
+  overflow: hidden;
+}
+
+/* ===========================
+   Marquee
+=========================== */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  animation: marquee 20s linear infinite;
+  width: max-content;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ===========================
+   Grain Texture Overlay
+=========================== */
+.grain-overlay::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+/* ===========================
+   Card Hover Effects
+=========================== */
+.food-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.food-card:hover {
+  transform: translateY(-8px);
+}
+
+.food-card .card-img {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.food-card:hover .card-img img {
+  transform: scale(1.08);
+}
+
+/* ===========================
+   Menu Filter Tabs
+=========================== */
+.filter-tab {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.filter-tab::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #7f1022;
+  transition: width 0.3s ease;
+}
+
+.filter-tab.active::after,
+.filter-tab:hover::after {
+  width: 100%;
+}
+
+/* ===========================
+   Outlet Card
+=========================== */
+.outlet-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.outlet-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px rgba(79, 16, 34, 0.15);
+}
+
+/* ===========================
+   Gallery Grid
+=========================== */
+.gallery-item {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-item:hover {
+  transform: scale(1.03);
+  z-index: 10;
+}
+
+.gallery-overlay {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .gallery-overlay {
+  opacity: 1;
+}
+
+/* ===========================
+   Floating Badge
+=========================== */
+@keyframes rotate-badge {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.badge-rotate {
+  animation: rotate-badge 12s linear infinite;
+}
+
+/* ===========================
+   Scroll Indicator
+=========================== */
+@keyframes scroll-down {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(12px); opacity: 0; }
+}
+
+.scroll-dot {
+  animation: scroll-down 1.5s ease infinite;
+}
+
+/* ===========================
+   Nav Link Hover
+=========================== */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #f1d270;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* ===========================
+   Section Dividers
+=========================== */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(127, 16, 34, 0.2), transparent);
+}
+
+/* ===========================
+   Coming Soon Badge
+=========================== */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(127, 16, 34, 0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(127, 16, 34, 0); }
+}
+
+.coming-soon-badge {
+  animation: pulse-glow 2s ease infinite;
+}
+
+/* ===========================
+   Button Hover
+=========================== */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  transition: left 0.4s ease;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+/* ===========================
+   Reduced Motion
+=========================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* ===========================
+   Mobile Menu
+=========================== */
+.mobile-menu {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.4s ease;
+}
+
+/* ===========================
+   Parallax Containers
+=========================== */
+.parallax-container {
+  overflow: hidden;
+}
+
+/* ===========================
+   Section Heading Underline
+=========================== */
+.heading-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.heading-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: #7f1022;
+}
+
+/* ===========================
+   Location Pin Animation
+=========================== */
+@keyframes pin-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.location-pin {
+  animation: pin-bounce 2s ease infinite;
+}
+
+/* ===========================
+   Hero Visual
+=========================== */
+.hero-image-reveal {
+  clip-path: inset(0 100% 0 0);
+}
+
+/* ===========================
+   Word Reveal Lines
+=========================== */
+.word-reveal {
+  overflow: hidden;
+  display: inline-block;
+}
+
+.line-reveal {
+  overflow: hidden;
+}
