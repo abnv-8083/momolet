@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import steamedMomos from '../assets/steamed_momos.jpg';
@@ -47,6 +47,14 @@ function SpecialItem({ item, index }) {
   const itemRef = useRef(null);
   const imgRef = useRef(null);
   const textRef = useRef(null);
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -105,10 +113,24 @@ function SpecialItem({ item, index }) {
   return (
     <div
       ref={itemRef}
-      style={{ padding: '96px 0', minHeight: '70vh', display: 'flex', alignItems: 'center', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.05)', backgroundColor: item.bg }}
+      style={{
+        padding: isMobile ? '48px 0' : '96px 0',
+        minHeight: isMobile ? 'auto' : '70vh',
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'hidden',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        backgroundColor: item.bg,
+      }}
     >
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px', width: '100%' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center', direction: !isLeft ? 'rtl' : 'ltr' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px', width: '100%' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          gap: isMobile ? '32px' : '80px',
+          alignItems: 'center',
+          direction: isMobile ? 'ltr' : (!isLeft ? 'rtl' : 'ltr'),
+        }}>
 
           {/* Image */}
           <div style={{ direction: 'ltr', position: 'relative', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 25px 60px rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -133,7 +155,7 @@ function SpecialItem({ item, index }) {
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3em', color: item.accent, opacity: 0.75 }}>
               Signature Special
             </p>
-            <h3 className="font-display" style={{ fontSize: 'clamp(2.5rem, 4.5vw, 4rem)', lineHeight: 0.95, letterSpacing: '-0.01em', color: item.accent }}>
+            <h3 className="font-display" style={{ fontSize: isMobile ? 'clamp(1.8rem, 6vw, 3rem)' : 'clamp(2.5rem, 4.5vw, 4rem)', lineHeight: 0.95, letterSpacing: '-0.01em', color: item.accent }}>
               {item.name.toUpperCase()}
             </h3>
             <p className="font-serif" style={{ fontSize: '20px', color: 'rgba(245,240,232,0.9)', fontStyle: 'italic', lineHeight: 1.5 }}>
@@ -163,6 +185,13 @@ function SpecialItem({ item, index }) {
 
 export default function Specials() {
   const headingRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -185,7 +214,7 @@ export default function Specials() {
   return (
     <section id="specials" className="overflow-hidden scroll-mt-20">
       {/* Section Header */}
-      <div style={{ background: '#f5f0e8', padding: '80px 48px', textAlign: 'center', borderBottom: '1px solid rgba(45,0,9,0.1)' }}>
+      <div style={{ background: '#f5f0e8', padding: isMobile ? '48px 20px' : '80px 48px', textAlign: 'center', borderBottom: '1px solid rgba(45,0,9,0.1)' }}>
         <div ref={headingRef}>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3em', color: '#7f1022', marginBottom: '16px' }}>
             Signature Specials

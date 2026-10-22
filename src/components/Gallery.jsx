@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { InstagramIcon } from './Icons';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -10,6 +10,14 @@ export default function Gallery() {
   const sectionRef = useRef(null);
   const headingRef = useRef(null);
   const gridRef = useRef(null);
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -47,16 +55,27 @@ export default function Gallery() {
   }, []);
 
   return (
-    <section id="gallery" ref={sectionRef} style={{ padding: '112px 0', background: '#f5f0e8', scrollMarginTop: '80px' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
+    <section id="gallery" ref={sectionRef} style={{ padding: isMobile ? '64px 0' : '112px 0', background: '#f5f0e8', scrollMarginTop: '80px' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' }}>
 
         {/* Heading */}
-        <div ref={headingRef} style={{ marginBottom: '64px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '24px', flexWrap: 'wrap' }}>
+        <div
+          ref={headingRef}
+          style={{
+            marginBottom: '64px',
+            display: 'flex',
+            alignItems: isMobile ? 'flex-start' : 'flex-end',
+            justifyContent: 'space-between',
+            gap: '24px',
+            flexWrap: 'wrap',
+            flexDirection: isMobile ? 'column' : 'row',
+          }}
+        >
           <div>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3em', color: '#7f1022', marginBottom: '16px' }}>
               Social Gallery
             </p>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.8rem, 5.5vw, 5rem)', color: '#2d0009', lineHeight: 0.92, letterSpacing: '-0.01em' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: isMobile ? 'clamp(2rem, 7vw, 3.5rem)' : 'clamp(2.8rem, 5.5vw, 5rem)', color: '#2d0009', lineHeight: 0.92, letterSpacing: '-0.01em' }}>
               A LITTLE TASTE<br />OF MOMOLET.
             </h2>
           </div>
@@ -78,14 +97,22 @@ export default function Gallery() {
         {/* Masonry-inspired grid */}
         <div
           ref={gridRef}
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', gridTemplateRows: 'auto' }}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+            gap: '20px',
+            gridTemplateRows: 'auto',
+          }}
         >
           {galleryItems.map((item, i) => {
-            const spanStyle = item.span === 'tall'
-              ? { gridRow: 'span 2' }
-              : item.span === 'wide'
-              ? { gridColumn: 'span 2' }
-              : {};
+            // On mobile, reset all spans to prevent awkward gaps
+            const spanStyle = isMobile
+              ? {}
+              : item.span === 'tall'
+                ? { gridRow: 'span 2' }
+                : item.span === 'wide'
+                  ? { gridColumn: 'span 2' }
+                  : {};
 
             return (
               <div
@@ -99,8 +126,8 @@ export default function Gallery() {
                   cursor: 'pointer',
                   boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
                   transition: 'box-shadow 0.5s, transform 0.5s',
-                  aspectRatio: item.span === 'wide' ? '16/9' : item.span === 'tall' ? undefined : '1/1',
-                  minHeight: item.span === 'tall' ? '320px' : undefined,
+                  aspectRatio: isMobile ? '1/1' : (item.span === 'wide' ? '16/9' : item.span === 'tall' ? undefined : '1/1'),
+                  minHeight: (!isMobile && item.span === 'tall') ? '320px' : undefined,
                   ...spanStyle,
                 }}
               >

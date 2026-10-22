@@ -1,18 +1,37 @@
-import { MapPin, Mail, Phone } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { MapPin, Mail } from 'lucide-react';
 import { InstagramIcon } from './Icons';
 import { navLinks } from '../data';
 
 export default function Footer() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+
+  useEffect(() => {
+    const handler = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+    };
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+
   const scrollTo = (href) => {
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const getGridCols = () => {
+    if (isMobile) return '1fr';
+    if (isTablet) return 'repeat(2, 1fr)';
+    return '1.5fr 1fr 1fr 1fr';
+  };
+
   return (
     <footer style={{ background: '#1a0a0e', borderTop: '1px solid rgba(245,240,232,0.1)' }}>
       {/* Main Footer */}
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '80px 48px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr', gap: '48px' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '48px 20px' : '80px 48px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: getGridCols(), gap: '48px' }}>
 
           {/* Brand */}
           <div>
@@ -121,7 +140,18 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div style={{ borderTop: '1px solid rgba(245,240,232,0.1)' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '24px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+        <div style={{
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: isMobile ? '16px 20px' : '24px 48px',
+          display: 'flex',
+          alignItems: isMobile ? 'center' : 'center',
+          justifyContent: isMobile ? 'center' : 'space-between',
+          flexDirection: isMobile ? 'column' : 'row',
+          gap: isMobile ? '8px' : '16px',
+          flexWrap: 'wrap',
+          textAlign: isMobile ? 'center' : undefined,
+        }}>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'rgba(245,240,232,0.3)' }}>
             © {new Date().getFullYear()} MOMOLET. All rights reserved. Made with ♥ in Kerala.
           </p>

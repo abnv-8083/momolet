@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { kitchenPassion, restaurantInterior } from '../data';
@@ -11,6 +11,14 @@ export default function Story() {
   const textRef = useRef(null);
   const imageRef = useRef(null);
   const bgImageRef = useRef(null);
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -113,71 +121,96 @@ export default function Story() {
       </div>
 
       {/* Main Story Content */}
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '112px 48px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '64px 20px' : '112px 48px' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          gap: isMobile ? '48px' : '80px',
+          alignItems: 'center',
+        }}>
 
           {/* Images - Left with offset padding to prevent edge collision */}
-          <div className="relative pb-12 sm:pb-16 pr-8 sm:pr-12 lg:pr-14">
-            {/* Background image (behind) */}
+          <div
+            className="relative"
+            style={isMobile
+              ? { paddingBottom: '48px', paddingRight: '24px' }
+              : { paddingBottom: undefined, paddingRight: undefined }}
+          >
+            {/* Use className for non-mobile, inline override for mobile */}
             <div
-              ref={bgImageRef}
-              className="relative rounded-3xl overflow-hidden shadow-2xl"
-              style={{ aspectRatio: '4/5' }}
+              className={isMobile ? '' : 'pb-12 sm:pb-16 pr-8 sm:pr-12 lg:pr-14'}
+              style={{ position: 'relative' }}
             >
-              <img
-                src={restaurantInterior}
-                alt="MOMOLET restaurant interior"
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#2d0009]/70 via-transparent to-transparent" />
-            </div>
-
-            {/* Foreground image (overlapping) */}
-            <div
-              ref={imageRef}
-              className="absolute -bottom-6 -right-4 sm:-bottom-8 sm:-right-8 w-2/3 rounded-3xl overflow-hidden shadow-2xl border-4 md:border-6 border-[#2d0009]"
-              style={{ clipPath: 'inset(0 0 0 0)' }}
-            >
-              <img
-                src={kitchenPassion}
-                alt="Chef crafting momos with passion"
-                className="w-full h-full object-cover"
-                loading="lazy"
-                style={{ aspectRatio: '3/4' }}
-              />
-            </div>
-
-            {/* Passion badge */}
-            <div className="passion-badge absolute -top-5 -left-5 sm:-left-8 w-20 h-20 sm:w-24 sm:h-24 bg-[#f1d270] rounded-full flex items-center justify-center shadow-2xl border-2 border-[#7f1022]/30">
-              <svg viewBox="0 0 80 80" className="badge-rotate absolute inset-0 w-full h-full">
-                <path
-                  id="story-badge-path"
-                  d="M 40,40 m -27,0 a 27,27 0 1,1 54,0 a 27,27 0 1,1 -54,0"
-                  fill="none"
+              {/* Background image (behind) */}
+              <div
+                ref={bgImageRef}
+                className="relative rounded-3xl overflow-hidden shadow-2xl"
+                style={{ aspectRatio: '4/5' }}
+              >
+                <img
+                  src={restaurantInterior}
+                  alt="MOMOLET restaurant interior"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
                 />
-                <text style={{ fontSize: '8px', fill: '#7f1022', fontWeight: 'bold' }}>
-                  <textPath href="#story-badge-path" startOffset="0%">
-                    ✦ MADE WITH PASSION ✦ MOMOLET ✦
-                  </textPath>
-                </text>
-              </svg>
-              <span className="text-[#7f1022] text-2xl sm:text-3xl">♥</span>
-            </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#2d0009]/70 via-transparent to-transparent" />
+              </div>
 
-            {/* Decorative elements */}
-            <div className="story-decor absolute top-1/2 left-0 -translate-x-full pr-6 hidden lg:block">
-              <div className="w-px h-28 bg-gradient-to-b from-transparent via-[#f1d270]/40 to-transparent" />
+              {/* Foreground image (overlapping) */}
+              <div
+                ref={imageRef}
+                className="absolute w-2/3 rounded-3xl overflow-hidden shadow-2xl border-4 md:border-6 border-[#2d0009]"
+                style={{
+                  clipPath: 'inset(0 0 0 0)',
+                  bottom: isMobile ? '-20px' : undefined,
+                  right: isMobile ? '-12px' : undefined,
+                }}
+              >
+                <img
+                  src={kitchenPassion}
+                  alt="Chef crafting momos with passion"
+                  className={isMobile ? '' : '-bottom-6 -right-4 sm:-bottom-8 sm:-right-8'}
+                  loading="lazy"
+                  style={{ aspectRatio: '3/4', width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+
+              {/* Passion badge */}
+              <div
+                className="passion-badge absolute bg-[#f1d270] rounded-full flex items-center justify-center shadow-2xl border-2 border-[#7f1022]/30"
+                style={isMobile
+                  ? { top: '-10px', left: '-10px', width: '72px', height: '72px' }
+                  : { top: '-20px', left: '-20px', width: '80px', height: '80px' }}
+              >
+                <svg viewBox="0 0 80 80" className="badge-rotate absolute inset-0 w-full h-full">
+                  <path
+                    id="story-badge-path"
+                    d="M 40,40 m -27,0 a 27,27 0 1,1 54,0 a 27,27 0 1,1 -54,0"
+                    fill="none"
+                  />
+                  <text style={{ fontSize: '8px', fill: '#7f1022', fontWeight: 'bold' }}>
+                    <textPath href="#story-badge-path" startOffset="0%">
+                      ✦ MADE WITH PASSION ✦ MOMOLET ✦
+                    </textPath>
+                  </text>
+                </svg>
+                <span className="text-[#7f1022] text-2xl sm:text-3xl">♥</span>
+              </div>
+
+              {/* Decorative elements */}
+              <div className="story-decor absolute top-1/2 left-0 -translate-x-full pr-6 hidden lg:block">
+                <div className="w-px h-28 bg-gradient-to-b from-transparent via-[#f1d270]/40 to-transparent" />
+              </div>
             </div>
           </div>
 
           {/* Text - Right */}
-          <div ref={textRef} style={{ paddingLeft: '16px' }}>
+          <div ref={textRef} style={{ paddingLeft: isMobile ? '0' : '16px' }}>
             <p className="story-line font-sans" style={{ fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3em', color: 'rgba(241,210,112,0.7)', marginBottom: '20px' }}>
               Our Philosophy
             </p>
 
-            <h2 className="font-display" style={{ fontSize: 'clamp(2.8rem, 5vw, 4.5rem)', color: '#f5f0e8', lineHeight: 0.92, letterSpacing: '-0.01em', marginBottom: '40px' }}>
+            <h2 className="font-display" style={{ fontSize: isMobile ? 'clamp(2rem, 7vw, 3.5rem)' : 'clamp(2.8rem, 5vw, 4.5rem)', color: '#f5f0e8', lineHeight: 0.92, letterSpacing: '-0.01em', marginBottom: '40px' }}>
               <span className="story-line" style={{ display: 'block' }}>GOOD FOOD.</span>
               <span className="story-line" style={{ display: 'block', color: '#f1d270' }}>GREAT MOODS.</span>
             </h2>
@@ -202,7 +235,7 @@ export default function Story() {
                 { number: '∞', label: 'Happy Bites' },
               ].map((stat) => (
                 <div key={stat.label}>
-                  <div className="font-display" style={{ fontSize: '48px', color: '#f1d270', marginBottom: '8px', lineHeight: 1 }}>{stat.number}</div>
+                  <div className="font-display" style={{ fontSize: isMobile ? '32px' : '48px', color: '#f1d270', marginBottom: '8px', lineHeight: 1 }}>{stat.number}</div>
                   <div className="font-sans" style={{ fontSize: '11px', color: 'rgba(245,240,232,0.5)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>{stat.label}</div>
                 </div>
               ))}

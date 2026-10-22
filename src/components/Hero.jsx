@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MapPin, Star } from 'lucide-react';
 import gsap from 'gsap';
 import { heroSpread } from '../data';
@@ -13,6 +13,14 @@ export default function Hero() {
   const decorRef = useRef(null);
   const locationsRef = useRef(null);
   const tagRef = useRef(null);
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -141,8 +149,8 @@ export default function Hero() {
       style={{
         position: 'relative',
         width: '100%',
-        height: '100vh',
-        minHeight: '700px',
+        height: isMobile ? 'auto' : '100vh',
+        minHeight: isMobile ? '100svh' : '700px',
         overflow: 'hidden',
         background: '#1a0a0e',
         display: 'flex',
@@ -182,7 +190,7 @@ export default function Hero() {
       {/* Main Content */}
       <div
         className="relative z-10 w-full"
-        style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}
+        style={{ maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' }}
       >
         <div style={{ maxWidth: '640px', paddingTop: '0px' }}>
 
@@ -198,7 +206,7 @@ export default function Hero() {
           <div ref={headlineRef} style={{ marginBottom: '32px' }}>
             <h1
               className="font-display text-[#f5f0e8] tracking-tight space-y-0.5"
-              style={{ fontSize: 'clamp(3rem, 5.5vw, 5.5rem)', lineHeight: 0.88 }}
+              style={{ fontSize: isMobile ? 'clamp(2.2rem, 8vw, 5.5rem)' : 'clamp(3rem, 5.5vw, 5.5rem)', lineHeight: 0.88 }}
             >
               <HeadlineLine words={line1} />
               <HeadlineLine words={line2} />
@@ -224,7 +232,11 @@ export default function Hero() {
           </div>
 
           {/* CTA Buttons */}
-          <div ref={ctaRef} className="flex flex-wrap items-center gap-4">
+          <div
+            ref={ctaRef}
+            className={isMobile ? '' : 'flex flex-wrap items-center gap-4'}
+            style={isMobile ? { display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '12px' } : {}}
+          >
             <button
               onClick={scrollToMenu}
               id="hero-explore-btn"

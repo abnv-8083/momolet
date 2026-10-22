@@ -8,6 +8,13 @@ export default function Loader({ onComplete }) {
   const taglineRef = useRef(null);
   const progressBarRef = useRef(null);
   const [progress, setProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   useEffect(() => {
     const tl = gsap.timeline({
@@ -106,8 +113,8 @@ export default function Loader({ onComplete }) {
           src={logo}
           alt="MOMOLET"
           style={{
-            width: '160px',
-            height: '160px',
+            width: isMobile ? '120px' : '160px',
+            height: isMobile ? '120px' : '160px',
             objectFit: 'contain',
             filter: 'drop-shadow(0 8px 32px rgba(127,16,34,0.6))',
           }}
@@ -141,7 +148,7 @@ export default function Loader({ onComplete }) {
       </div>
 
       {/* Progress */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', width: '180px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', width: isMobile ? '140px' : '180px' }}>
         <div style={{
           width: '100%',
           height: '2px',

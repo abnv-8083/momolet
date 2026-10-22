@@ -70,10 +70,17 @@ function MenuCard({ item, index }) {
 
 export default function Menu() {
   const [activeCategory, setActiveCategory] = useState('All');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const sectionRef = useRef(null);
   const headingRef = useRef(null);
   const filterRef = useRef(null);
   const gridRef = useRef(null);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   const filtered = activeCategory === 'All'
     ? menuItems
@@ -140,22 +147,26 @@ export default function Menu() {
   }, [activeCategory]);
 
   return (
-    <section id="menu" ref={sectionRef} style={{ padding: '112px 0', background: '#f5f0e8', scrollMarginTop: '80px' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
+    <section id="menu" ref={sectionRef} style={{ padding: isMobile ? '64px 0' : '112px 0', background: '#f5f0e8', scrollMarginTop: '80px' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' }}>
 
         {/* Heading */}
         <div ref={headingRef} style={{ marginBottom: '64px' }}>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3em', color: '#7f1022', marginBottom: '16px' }}>
             Our Menu
           </p>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(3.5rem, 7vw, 6rem)', color: '#2d0009', lineHeight: 0.92, letterSpacing: '-0.01em', marginBottom: '0' }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: isMobile ? 'clamp(2.2rem, 8vw, 4rem)' : 'clamp(3.5rem, 7vw, 6rem)', color: '#2d0009', lineHeight: 0.92, letterSpacing: '-0.01em', marginBottom: '0' }}>
             CRAVINGS<br />DON'T WAIT.
           </h2>
           <div style={{ height: '4px', width: '80px', background: '#7f1022', marginTop: '24px', borderRadius: '9999px' }} />
         </div>
 
         {/* Category Filter */}
-        <div ref={filterRef} style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '56px' }}>
+        <div
+          ref={filterRef}
+          className={isMobile ? 'mob-filter-scroll' : ''}
+          style={isMobile ? { marginBottom: '56px' } : { display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '56px' }}
+        >
           {menuCategories.map((cat) => (
             <button
               key={cat}
@@ -173,6 +184,7 @@ export default function Menu() {
                 color: activeCategory === cat ? '#f5f0e8' : 'rgba(45,0,9,0.75)',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
+                flexShrink: 0,
               }}
             >
               {cat}
@@ -183,7 +195,7 @@ export default function Menu() {
         {/* Cards Grid */}
         <div
           ref={gridRef}
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '36px' }}
+          style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(300px, 1fr))', gap: '36px' }}
         >
           {filtered.map((item, i) => (
             <MenuCard key={item.id} item={item} index={i} />

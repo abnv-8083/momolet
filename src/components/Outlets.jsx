@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MapPin, ExternalLink, Clock } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -98,6 +98,18 @@ export default function Outlets() {
   const headingRef = useRef(null);
   const gridRef = useRef(null);
 
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+
+  useEffect(() => {
+    const handler = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+    };
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Heading
@@ -132,16 +144,22 @@ export default function Outlets() {
     return () => ctx.revert();
   }, []);
 
+  const getGridCols = () => {
+    if (isMobile) return '1fr';
+    if (isTablet) return 'repeat(2, 1fr)';
+    return 'repeat(4, 1fr)';
+  };
+
   return (
-    <section id="outlets" ref={sectionRef} style={{ padding: '112px 0', background: '#1a0a0e', scrollMarginTop: '80px' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 48px' }}>
+    <section id="outlets" ref={sectionRef} style={{ padding: isMobile ? '64px 0' : '112px 0', background: '#1a0a0e', scrollMarginTop: '80px' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '0 20px' : '0 48px' }}>
 
         {/* Heading */}
         <div ref={headingRef} style={{ marginBottom: '64px' }}>
           <p style={{ fontFamily: 'var(--font-sans)', fontSize: '11px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3em', color: 'rgba(241,210,112,0.7)', marginBottom: '16px' }}>
             Find Us
           </p>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.8rem, 6vw, 5.5rem)', color: '#f5f0e8', lineHeight: 0.92, letterSpacing: '-0.01em' }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: isMobile ? 'clamp(2rem, 7vw, 3.5rem)' : 'clamp(2.8rem, 6vw, 5.5rem)', color: '#f5f0e8', lineHeight: 0.92, letterSpacing: '-0.01em' }}>
             YOUR NEXT FAVOURITE<br />
             <span style={{ color: '#f1d270' }}>BITE IS CLOSER.</span>
           </h2>
@@ -151,7 +169,7 @@ export default function Outlets() {
         {/* Grid */}
         <div
           ref={gridRef}
-          style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '28px' }}
+          style={{ display: 'grid', gridTemplateColumns: getGridCols(), gap: '28px' }}
         >
           {outlets.map((outlet, i) => (
             <OutletCard key={outlet.id} outlet={outlet} index={i} />

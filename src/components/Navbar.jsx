@@ -7,10 +7,17 @@ import gsap from 'gsap';
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const navRef = useRef(null);
   const logoRef = useRef(null);
   const linkRefs = useRef([]);
   const mobileMenuRef = useRef(null);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -76,7 +83,7 @@ export default function Navbar() {
         <div style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: '16px 48px',
+          padding: isMobile ? '16px 20px' : '16px 48px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -91,7 +98,7 @@ export default function Navbar() {
             className="group"
           >
             <span className="font-display group-hover:text-[#f1d270] transition-colors duration-300"
-              style={{ fontSize: '26px', color: '#f5f0e8', letterSpacing: '0.12em' }}>
+              style={{ fontSize: isMobile ? '20px' : '26px', color: '#f5f0e8', letterSpacing: '0.12em' }}>
               MOMOLET
             </span>
             <span style={{ fontSize: '9px', letterSpacing: '0.3em', fontFamily: 'var(--font-sans)', fontWeight: 500, textTransform: 'uppercase', color: 'rgba(241,210,112,0.6)' }}>
